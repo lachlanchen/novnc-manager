@@ -33,8 +33,8 @@ vista previa en vivo de solo lectura y apertura interactiva con un clic.
 ## Qué ofrece
 
 - **Descubrimiento dinámico**: los nuevos listeners noVNC aparecen sin mantener un inventario fijo.
-- **Tres vistas específicas**: Grid para densidad, Carousel para explorar y Focus para una vista previa grande.
-- **Dos temas persistentes**: Vivid es el predeterminado y Calm ofrece una apariencia más tranquila.
+- **Tres vistas específicas**: Grid para densidad, Carousel con vista previa e información en vivo y Focus para una vista previa grande.
+- **Tres temas persistentes**: Vivid es el predeterminado, Bright aporta luminosidad y Calm ofrece una apariencia tranquila.
 - **Vista previa segura**: solo se carga una conexión VNC de solo lectura a la vez.
 - **Detalles de origen**: puertos Web/VNC, X display, resolución, PID, tiempo activo,
   tmux pane, systemd unit, lanzador y ubicación del proyecto.

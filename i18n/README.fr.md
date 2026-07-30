@@ -33,8 +33,8 @@ contexte de lancement, aperçu direct en lecture seule et ouverture interactive.
 ## Ce que vous obtenez
 
 - **Découverte dynamique** — les nouveaux écouteurs noVNC apparaissent sans inventaire fixe.
-- **Trois vues dédiées** — Grid pour la densité, Carousel pour parcourir, Focus pour un grand aperçu.
-- **Deux thèmes persistants** — Vivid par défaut, avec un thème Calm plus discret.
+- **Trois vues dédiées** — Grid pour la densité, Carousel avec aperçu et informations en direct, Focus pour un grand aperçu.
+- **Trois thèmes persistants** — Vivid par défaut, Bright pour la lumière et Calm plus discret.
 - **Aperçu sûr** — une seule connexion VNC différée et en lecture seule à la fois.
 - **Détails d’origine** — ports Web/VNC, X display, résolution, PID, durée,
   tmux pane, systemd unit, lanceur et emplacement du projet.

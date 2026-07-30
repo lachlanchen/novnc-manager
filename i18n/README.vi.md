@@ -33,8 +33,8 @@ xem trước trực tiếp chỉ đọc và mở tương tác bằng một cú n
 ## Tính năng
 
 - **Phát hiện động** — listener noVNC mới tự xuất hiện, không cần danh sách cố định.
-- **Ba chế độ có mục đích** — Grid để xem dày, Carousel để duyệt đẹp, Focus để xem lớn.
-- **Hai giao diện được lưu** — Vivid là mặc định, Calm dành cho phong cách yên tĩnh.
+- **Ba chế độ có mục đích** — Grid để xem dày, Carousel có bản xem trước và thông tin trực tiếp, Focus để xem lớn.
+- **Ba giao diện được lưu** — Vivid là mặc định, Bright sáng rõ và Calm dành cho phong cách yên tĩnh.
 - **Xem trước an toàn** — chỉ một kết nối VNC chỉ đọc được tải trễ tại một thời điểm.
 - **Chi tiết nguồn** — cổng Web/VNC, X display, độ phân giải, PID, thời gian chạy,
   tmux pane, systemd unit, launcher và vị trí dự án.

@@ -22,6 +22,7 @@
       <div class="topbar-actions">
         <div class="theme-picker" role="group" aria-label="Color theme">
           <button type="button" data-theme-choice="vivid" aria-pressed="true">Vivid</button>
+          <button type="button" data-theme-choice="bright" aria-pressed="false">Bright</button>
           <button type="button" data-theme-choice="calm" aria-pressed="false">Calm</button>
         </div>
         <div class="live-chip"><span class="pulse"></span><span id="scan-status">Scanning…</span></div>
@@ -105,7 +106,8 @@
             <div>
               <p class="eyebrow">LIVE PREVIEW</p>
               <h2 id="preview-title">Select a desktop</h2>
-              <p id="preview-subtitle">The preview connects only when selected.</p>
+              <p id="preview-subtitle" class="preview-subtitle">The preview connects only when selected.</p>
+              <p id="preview-purpose" class="preview-purpose" hidden></p>
             </div>
             <div class="preview-actions">
               <button id="reload-preview" class="icon-button" type="button" title="Reconnect preview" disabled>

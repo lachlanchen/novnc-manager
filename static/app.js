@@ -2,6 +2,8 @@ const state = {
   sessions: [],
   selectedId: null,
   carouselIndex: 0,
+  carouselPreviewTimer: null,
+  previewLoadToken: 0,
   refreshing: false,
   timer: null,
 };
@@ -19,6 +21,7 @@ const elements = {
   visible: document.querySelector("#visible-count"),
   previewTitle: document.querySelector("#preview-title"),
   previewSubtitle: document.querySelector("#preview-subtitle"),
+  previewPurpose: document.querySelector("#preview-purpose"),
   previewFrame: document.querySelector("#preview-frame"),
   previewPlaceholder: document.querySelector("#preview-placeholder"),
   previewMeta: document.querySelector("#preview-meta"),
@@ -39,7 +42,7 @@ const elements = {
 };
 
 function setTheme(theme) {
-  const selected = theme === "calm" ? "calm" : "vivid";
+  const selected = ["vivid", "bright", "calm"].includes(theme) ? theme : "vivid";
   document.documentElement.dataset.theme = selected;
   localStorage.setItem("novnc-manager-theme", selected);
   for (const button of elements.themeChoices) {
@@ -61,6 +64,10 @@ function setView(view) {
       "aria-pressed",
       button.dataset.viewChoice === selected ? "true" : "false",
     );
+  }
+  if (selected !== "carousel") {
+    clearTimeout(state.carouselPreviewTimer);
+    state.carouselPreviewTimer = null;
   }
   if (selected === "carousel") {
     requestAnimationFrame(() => {
@@ -109,6 +116,22 @@ function node(tag, className, text) {
 
 function fact(text) {
   return node("span", "fact", text);
+}
+
+function previewInfo(label, value, options = {}) {
+  const item = node(
+    "div",
+    `preview-meta-item${options.wide ? " wide" : ""}`,
+  );
+  const labelNode = node("span", "preview-meta-label", label);
+  const valueNode = node(
+    "span",
+    `preview-meta-value${options.status ? ` status-${options.status}` : ""}`,
+    value || "Not identified",
+  );
+  valueNode.title = value || "Not identified";
+  item.append(labelNode, valueNode);
+  return item;
 }
 
 function filteredSessions() {
@@ -201,7 +224,8 @@ function updateCarousel() {
     }
     const clamped = Math.max(-3, Math.min(3, distance));
     const rotation = clamped * -18;
-    const scale = Math.max(0.72, 1 - absolute * 0.11);
+    const activeScale = window.innerWidth <= 760 ? 1.05 : 1.16;
+    const scale = Math.max(0.7, activeScale - absolute * 0.17);
     const depth = Math.min(190, absolute * 92);
     card.style.transform =
       `perspective(1100px) translateZ(${-depth}px) rotateY(${rotation}deg) scale(${scale})`;
@@ -213,6 +237,10 @@ function updateCarousel() {
 
   state.carouselIndex = nearestIndex;
   elements.carouselPosition.textContent = `${nearestIndex + 1} / ${cards.length}`;
+  const activeId = cards[nearestIndex]?.dataset.id;
+  scheduleCarouselPreview(
+    state.sessions.find((session) => session.id === activeId),
+  );
 }
 
 function moveCarousel(delta) {
@@ -229,32 +257,92 @@ function moveCarousel(delta) {
   });
 }
 
-function selectPreview(session, reload = false) {
+function updatePreviewInformation(session) {
   if (!session) return;
-  setView("focus");
-  state.selectedId = session.id;
+  const status = session.status || "unknown";
   elements.previewTitle.textContent = session.name;
   elements.previewSubtitle.textContent =
-    `${session.status} · web ${session.web_port} → VNC ${session.vnc_port || "unknown"}`;
+    `${status} · web ${session.web_port} → VNC ${session.vnc_port || "unknown"}`;
+  elements.previewPurpose.textContent = session.purpose || "";
+  elements.previewPurpose.hidden = !session.purpose;
   elements.previewMeta.hidden = false;
   elements.previewMeta.replaceChildren(
-    node("span", "", session.display ? `Display ${session.display}` : "Display unknown"),
-    node("span", "", session.resolution || "Resolution unknown"),
-    node("span", "", session.source_detail),
-    node("span", "", `Up ${formatUptime(session.uptime_seconds)}`),
+    previewInfo("Status", status, { status }),
+    previewInfo("Runtime", `Up ${formatUptime(session.uptime_seconds)}`),
+    previewInfo("Web access", `127.0.0.1:${session.web_port}`),
+    previewInfo(
+      "VNC backend",
+      `${session.vnc_host || "unknown"}:${session.vnc_port || "unknown"}`,
+    ),
+    previewInfo(
+      "Desktop",
+      [
+        session.display ? `Display ${session.display}` : "Display unknown",
+        session.resolution || "Resolution unknown",
+      ].join(" · "),
+    ),
+    previewInfo(
+      "Origin",
+      [session.source_kind, session.source_detail].filter(Boolean).join(" · "),
+    ),
+    previewInfo("Project / launcher", session.source_path, { wide: true }),
   );
+}
+
+function renderPreview(session, options = {}) {
+  if (!session) return;
+  const { reload = false, rerender = false } = options;
+  state.selectedId = session.id;
+  updatePreviewInformation(session);
   elements.previewPlaceholder.hidden = true;
   elements.previewFrame.hidden = false;
   elements.reloadPreview.disabled = false;
   elements.openPreview.disabled = false;
   if (reload || elements.previewFrame.dataset.sessionId !== session.id) {
+    const loadToken = ++state.previewLoadToken;
     elements.previewFrame.src = "about:blank";
-    requestAnimationFrame(() => {
+    elements.previewFrame.dataset.sessionId = session.id;
+    setTimeout(() => {
+      if (
+        loadToken !== state.previewLoadToken ||
+        elements.previewFrame.dataset.sessionId !== session.id
+      ) {
+        return;
+      }
       elements.previewFrame.src = session.preview_url;
-      elements.previewFrame.dataset.sessionId = session.id;
-    });
+    }, 0);
   }
-  renderCards();
+  if (rerender) renderCards();
+}
+
+function scheduleCarouselPreview(session, immediate = false) {
+  clearTimeout(state.carouselPreviewTimer);
+  state.carouselPreviewTimer = null;
+  if (!session) return;
+  if (
+    state.selectedId === session.id &&
+    elements.previewFrame.dataset.sessionId === session.id
+  ) {
+    return;
+  }
+  const connect = () => {
+    state.carouselPreviewTimer = null;
+    if (!elements.workspace.classList.contains("carousel-mode")) return;
+    const cards = [...elements.list.querySelectorAll(".session-card")];
+    if (cards[state.carouselIndex]?.dataset.id !== session.id) return;
+    renderPreview(session);
+  };
+  if (immediate) {
+    connect();
+  } else {
+    state.carouselPreviewTimer = setTimeout(connect, 260);
+  }
+}
+
+function selectPreview(session, reload = false) {
+  if (!session) return;
+  setView("focus");
+  renderPreview(session, { reload, rerender: true });
 }
 
 function openSession(session) {
@@ -321,8 +409,7 @@ async function refresh() {
     renderCards();
     const selected = currentSession();
     if (selected) {
-      elements.previewSubtitle.textContent =
-        `${selected.status} · web ${selected.web_port} → VNC ${selected.vnc_port || "unknown"}`;
+      updatePreviewInformation(selected);
     }
   } catch (error) {
     elements.scanStatus.textContent = "Inventory unavailable";
@@ -345,11 +432,24 @@ elements.list.addEventListener("click", (event) => {
     if (index >= 0) {
       state.carouselIndex = index;
       card.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+      renderPreview(session);
     }
     return;
   }
   const action = button?.dataset.action || "preview";
-  if (action === "preview") selectPreview(session);
+  if (action === "preview") {
+    if (elements.workspace.classList.contains("carousel-mode")) {
+      const cards = [...elements.list.querySelectorAll(".session-card")];
+      const index = cards.indexOf(card);
+      if (index >= 0) {
+        state.carouselIndex = index;
+        card.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+      }
+      renderPreview(session);
+    } else {
+      selectPreview(session);
+    }
+  }
   if (action === "open") openSession(session);
   if (action === "details") showDetails(session);
 });
@@ -369,7 +469,9 @@ elements.list.addEventListener(
   { passive: false },
 );
 elements.refresh.addEventListener("click", refresh);
-elements.reloadPreview.addEventListener("click", () => selectPreview(currentSession(), true));
+elements.reloadPreview.addEventListener("click", () =>
+  renderPreview(currentSession(), { reload: true }),
+);
 elements.openPreview.addEventListener("click", () => openSession(currentSession()));
 elements.autoRefresh.addEventListener("change", () => {
   clearInterval(state.timer);

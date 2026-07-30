@@ -33,8 +33,8 @@ schreibgeschützter Live-Vorschau und interaktivem Öffnen per Klick.
 ## Funktionen
 
 - **Dynamische Erkennung** — neue noVNC-Listener erscheinen ohne statische Liste.
-- **Drei gezielte Ansichten** — Grid für Dichte, Carousel zum Stöbern, Focus für große Vorschau.
-- **Zwei dauerhafte Themes** — standardmäßig Vivid, alternativ das ruhige Calm.
+- **Drei gezielte Ansichten** — Grid für Dichte, Carousel mit Live-Vorschau und Informationen, Focus für große Vorschau.
+- **Drei dauerhafte Themes** — standardmäßig Vivid, dazu das helle Bright und das ruhige Calm.
 - **Sichere Vorschau** — jeweils nur eine verzögert geladene VNC-Verbindung im Lesemodus.
 - **Herkunftsdetails** — Web/VNC-Ports, X display, Auflösung, PID, Laufzeit,
   tmux pane, systemd unit, Starter und Projektpfad.

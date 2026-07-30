@@ -34,9 +34,10 @@ view-only live previews, and one-click interactive opening.
 
 - **Dynamic discovery** — new noVNC listeners appear automatically; no static
   inventory is required.
-- **Three purposeful views** — Grid for density, Carousel for elegant browsing,
-  and Focus for a large live preview.
-- **Two persistent themes** — vivid color by default, with a quiet Calm theme.
+- **Three purposeful views** — Grid for density, Carousel for elegant browsing
+  with a live session inspector, and Focus for a large live preview.
+- **Three persistent themes** — vivid color by default, a bright Light-style
+  workspace, and a quiet Calm theme.
 - **Safe previewing** — only one lazy-loaded, view-only VNC connection is opened
   at a time.
 - **Source-aware details** — web/VNC ports, X display, framebuffer size, PID,
@@ -104,14 +105,14 @@ reliable remote-desktop compositing; otherwise it falls back to `xdg-open`.
 | Mode | Best for | Interaction |
 | --- | --- | --- |
 | **Grid** | Seeing many sessions at once | Compact cards across the full width |
-| **Carousel** | Browsing like Vista Flip 3D / Compiz | Mouse wheel, click, or ← / → |
+| **Carousel** | Browsing like Vista Flip 3D / Compiz | Enlarged center card, live preview and full session info |
 | **Focus** | Inspecting one desktop | Large lazy-loaded view-only preview |
 
 Select **Open ↗** for a full interactive noVNC tab. Theme and view choices are
 stored locally in the browser. They can also be selected in a URL for demos:
 
 ```text
-http://127.0.0.1:7080/?view=carousel&theme=vivid
+http://127.0.0.1:7080/?view=carousel&theme=bright
 ```
 
 ## Configuration
