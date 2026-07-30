@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+message: "If you use noVNC Session Manager, please cite this repository."
+type: software
+title: "noVNC Session Manager: A local control plane for virtual desktops"
+version: 1.0.0
+date-released: 2026-07-30
+abstract: "A local-first dashboard that dynamically discovers, explains, previews, and opens noVNC desktops on Linux."
+authors:
+  - family-names: Chen
+    given-names: Lachlan
+    alias: lachlanchen
+repository-code: "https://github.com/lachlanchen/novnc-manager"
+url: "https://lazying.art"
+license: MIT
+keywords:
+  - noVNC
+  - VNC
+  - remote desktop
+  - Linux
+  - systemd
+  - X11
+  - observability

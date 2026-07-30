@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en" data-theme="vivid">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>noVNC Session Manager</title>
+    <link rel="stylesheet" href="/style.css">
+  </head>
+  <body>
+    <div class="ambient ambient-one"></div>
+    <div class="ambient ambient-two"></div>
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="noVNC Session Manager home">
+        <span class="brand-mark" aria-hidden="true">
+          <span></span><span></span><span></span>
+        </span>
+        <span>
+          <strong>noVNC Session Manager</strong>
+          <small>Local desktop observatory</small>
+        </span>
+      </a>
+      <div class="topbar-actions">
+        <div class="theme-picker" role="group" aria-label="Color theme">
+          <button type="button" data-theme-choice="vivid" aria-pressed="true">Vivid</button>
+          <button type="button" data-theme-choice="calm" aria-pressed="false">Calm</button>
+        </div>
+        <div class="live-chip"><span class="pulse"></span><span id="scan-status">Scanning…</span></div>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div>
+          <p class="eyebrow">LOCAL CONTROL PLANE</p>
+          <h1>Every virtual desktop, <span>one clear view.</span></h1>
+          <p class="lede">
+            Live discovery of noVNC proxies, VNC backends, X displays, tmux origins,
+            and project context—without changing the sessions themselves.
+          </p>
+        </div>
+        <div class="summary" aria-label="Session summary">
+          <div><strong id="total-count">—</strong><span>discovered</span></div>
+          <div><strong id="online-count">—</strong><span>online</span></div>
+          <div><strong id="degraded-count">—</strong><span>attention</span></div>
+        </div>
+      </section>
+
+      <section class="toolbar" aria-label="Dashboard controls">
+        <label class="search">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m21 21-4.35-4.35m2.35-5.65a8 8 0 1 1-16 0 8 8 0 0 1 16 0Z"/></svg>
+          <input id="search" type="search" placeholder="Search by app, project, port, display…" autocomplete="off">
+        </label>
+        <label class="auto-refresh">
+          <input id="auto-refresh" type="checkbox" checked>
+          <span class="switch"></span>
+          Auto refresh
+        </label>
+        <div class="view-picker" role="group" aria-label="Dashboard layout">
+          <button type="button" data-view-choice="grid" aria-pressed="true" title="Grid overview">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z"/></svg>
+            Grid
+          </button>
+          <button type="button" data-view-choice="carousel" aria-pressed="false" title="3D carousel">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m4 7 5-3v16l-5-3zM20 7l-5-3v16l5-3zM11 5h2v14h-2z"/></svg>
+            Carousel
+          </button>
+          <button type="button" data-view-choice="focus" aria-pressed="false" title="Sessions and live preview">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h7v16H3zM14 4h7v16h-7z"/></svg>
+            Focus
+          </button>
+        </div>
+        <button id="refresh" class="button secondary" type="button">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.34-5.66M20 4v6h-6"/></svg>
+          Refresh
+        </button>
+      </section>
+
+      <section id="workspace" class="workspace grid-mode">
+        <div class="session-column">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">DISCOVERED NOW</p>
+              <h2>Sessions</h2>
+            </div>
+            <div class="section-tools">
+              <div id="carousel-nav" class="carousel-nav" hidden>
+                <button id="carousel-previous" type="button" aria-label="Previous session">←</button>
+                <span id="carousel-position">1 / 1</span>
+                <button id="carousel-next" type="button" aria-label="Next session">→</button>
+              </div>
+              <span id="visible-count" class="count-badge">0</span>
+            </div>
+          </div>
+          <div id="session-list" class="session-list" aria-live="polite">
+            <div class="loading-card"><span></span><span></span><span></span></div>
+          </div>
+          <div id="empty-state" class="empty-state" hidden>
+            <strong>No matching session</strong>
+            <span>Try another search or refresh the inventory.</span>
+          </div>
+        </div>
+
+        <aside class="preview-panel">
+          <div class="preview-header">
+            <div>
+              <p class="eyebrow">LIVE PREVIEW</p>
+              <h2 id="preview-title">Select a desktop</h2>
+              <p id="preview-subtitle">The preview connects only when selected.</p>
+            </div>
+            <div class="preview-actions">
+              <button id="reload-preview" class="icon-button" type="button" title="Reconnect preview" disabled>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.34-5.66M20 4v6h-6"/></svg>
+              </button>
+              <button id="open-preview" class="icon-button" type="button" title="Open interactive session in new tab" disabled>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3h7v7m0-7-9 9M21 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5"/></svg>
+              </button>
+            </div>
+          </div>
+          <div id="preview-stage" class="preview-stage">
+            <div id="preview-placeholder" class="preview-placeholder">
+              <span class="screen-glyph"><i></i></span>
+              <strong>Preview without disturbing the session</strong>
+              <span>Choose Preview on any card. The embedded connection is view-only.</span>
+            </div>
+            <iframe id="preview-frame" title="Selected noVNC session preview" hidden></iframe>
+          </div>
+          <div id="preview-meta" class="preview-meta" hidden></div>
+        </aside>
+      </section>
+    </main>
+
+    <dialog id="details-dialog">
+      <form method="dialog">
+        <button class="dialog-close" value="close" aria-label="Close details">×</button>
+      </form>
+      <p class="eyebrow">SESSION DETAILS</p>
+      <h2 id="details-title"></h2>
+      <p id="details-purpose" class="dialog-purpose"></p>
+      <dl id="details-list"></dl>
+    </dialog>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <script src="/app.js"></script>
+  </body>
+</html>

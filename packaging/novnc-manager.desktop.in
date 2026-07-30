@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=noVNC Session Manager
+GenericName=Virtual Desktop Manager
+Comment=Discover, preview, and open local noVNC desktops
+Exec=@OPEN_SCRIPT@
+Icon=novnc-manager
+Terminal=false
+Categories=Network;RemoteAccess;
+Keywords=noVNC;VNC;remote;desktop;session;manager;
+StartupNotify=true
+StartupWMClass=NoVNCManager

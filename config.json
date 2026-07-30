@@ -1,0 +1,95 @@
+{
+  "ports": {
+    "6086": {
+      "name": "EchoMind SB2 GUI",
+      "purpose": "Remote EchoMind workspace used for Surface Book 2 GUI operations.",
+      "project": "/home/lachlan/ProjectsLFS/EchoMindSanitized",
+      "priority": 70
+    },
+    "6087": {
+      "name": "Astrill Lazy Router",
+      "purpose": "Isolated browser desktop for inspecting and operating the Astrill router controller.",
+      "project": "/home/lachlan/ProjectsLFS/astrill-lazy-router",
+      "source": "/home/lachlan/ProjectsLFS/astrill-lazy-router/scripts/run-novnc-debug.sh",
+      "priority": 80
+    },
+    "6094": {
+      "name": "EchoMind OAuth",
+      "purpose": "Isolated browser used for EchoMind OAuth and account authorization flows.",
+      "project": "/home/lachlan/ProjectsLFS/EchoMind",
+      "priority": 60
+    },
+    "6099": {
+      "name": "Agentic Browser",
+      "purpose": "General isolated browser desktop for agent-driven web workflows.",
+      "project": "/home/lachlan/ProjectsLFS/AgenticBrowser",
+      "priority": 40
+    },
+    "6100": {
+      "name": "AgInTi Books Desktop",
+      "purpose": "Virtual desktop supporting AgInTi book and browser workflows.",
+      "project": "/home/lachlan/ProjectsLFS/AgenticBrowser",
+      "priority": 45
+    },
+    "6107": {
+      "name": "LabCanvas WeChat",
+      "purpose": "Visible WeChat desktop used by LabCanvas chat operations.",
+      "project": "/home/lachlan/ProjectsLFS/AgenticApp",
+      "priority": 50
+    },
+    "6114": {
+      "name": "LabCanvas Studio",
+      "purpose": "Dedicated browser desktop for LabCanvas Studio automation and review.",
+      "project": "/home/lachlan/ProjectsLFS/AgenticApp",
+      "priority": 50
+    },
+    "6116": {
+      "name": "Lala Studio",
+      "purpose": "Dedicated browser desktop for LALACHAN story and video workflows.",
+      "project": "/home/lachlan/ProjectsLFS/LALACHAN",
+      "priority": 55
+    },
+    "6125": {
+      "name": "PocketPolyglot Studio Browser",
+      "purpose": "Browser desktop for PocketPolyglot and multilingual book production.",
+      "project": "/home/lachlan/ProjectsLFS/ZhJpBook",
+      "priority": 50
+    },
+    "6129": {
+      "name": "LabCanvas Android MIX 2S",
+      "purpose": "scrcpy desktop for the connected MIX 2S Android device.",
+      "project": "/home/lachlan/ProjectsLFS/AgenticApp",
+      "priority": 55
+    },
+    "6133": {
+      "name": "WeCom Admin",
+      "purpose": "Visible WeCom administration desktop for LabCanvas workflows.",
+      "project": "/home/lachlan/ProjectsLFS/AgenticApp",
+      "priority": 45
+    },
+    "6187": {
+      "name": "Protein Structure Browser",
+      "purpose": "AlphaFold and protein-structure browser workspace used by LabCanvas.",
+      "project": "/home/lachlan/ProjectsLFS/ProteinStructure",
+      "priority": 45
+    },
+    "6189": {
+      "name": "BioRender Browser",
+      "purpose": "Isolated BioRender browser for scientific illustration workflows.",
+      "project": "/home/lachlan/ProjectsLFS/AgenticApp",
+      "priority": 45
+    },
+    "6192": {
+      "name": "WeCom Client",
+      "purpose": "Visible WeCom client desktop used by LabCanvas agents.",
+      "project": "/home/lachlan/ProjectsLFS/AgenticApp",
+      "priority": 45
+    },
+    "6970": {
+      "name": "EchoMind Native Android",
+      "purpose": "Android emulator desktop running the native EchoMind application.",
+      "project": "/home/lachlan/ProjectsLFS/EchoMindSanitized",
+      "priority": 100
+    }
+  }
+}
